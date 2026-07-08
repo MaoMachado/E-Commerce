@@ -6,4 +6,6 @@ con: id, name, price, image (usa picsum.photos o unsplash), category y stock.
 Tarea B: Crear el componente ProductCard y el grid del Catalog.
 Quiero que sea 100% responsive (mobile first, con Tailwind o CSS Modules, tú eliges).
 
-Tarea C (Bonus si te sobra tiempo): Crear el contexto del carrito (CartContext) con la función addToCart. Por ahora solo que muestre un contador en el header.
+Tarea C (Bonus si te sobra tiempo):
+Crear el contexto del carrito (CartContext) con la función addToCart.
+Por ahora solo que muestre un contador en el header.

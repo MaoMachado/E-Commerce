@@ -1,10 +1,14 @@
+import Header from "./components/Header";
 import ProductCard from "./components/ProductCard";
+import { CartProvider } from "./context/CartContext";
 
 export default function Home() {
   return (
     <main>
-      <h1 className="text-center text-2xl my-3 font-bold">E-Commerce</h1>
-      <ProductCard />
+      <CartProvider>
+        <Header />
+        <ProductCard />
+      </CartProvider>
     </main>
   );
 }
