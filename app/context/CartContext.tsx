@@ -10,7 +10,7 @@ type CartContextType = CartState & {
   clearCart: () => void;
 };
 
-const CartContext = createContext<CartContextType | any>(null);
+const CartContext = createContext<CartContextType | null>(null);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
@@ -30,7 +30,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(state));
   }, [state]);
 
-  const addToCart = (product: { id: number }) => {
+  const addToCart = (product: Product) => {
     dispatch({ type: "ADD_ITEM", payload: product });
   };
 
@@ -51,7 +51,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useCart = () => {
+export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) {
     throw new Error("useCart must be used within a CartProvider");

@@ -1,0 +1,218 @@
+"use client";
+
+import Link from "next/link";
+import { useCart } from "../context/CartContext";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Route } from "next";
+
+type Inputs = {
+  nameComplete: string;
+  lastNameComplete: string;
+  email: string;
+  confirmEmail: string;
+  address: string;
+  numberPhone: number;
+};
+
+export default function Checkout() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  const { items, clearCart } = useCart();
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    setLoading(true);
+
+    if (data.email !== data.confirmEmail) {
+      setMessage("The emails do not match.");
+      setLoading(false);
+      return;
+    }
+
+    setTimeout(() => {
+      setLoading(false);
+      clearCart();
+
+      const encodeName = encodeURIComponent(data.nameComplete);
+      router.push(`/success?name=${encodeName}`);
+    }, 2000);
+  };
+
+  const totalPrice: number = items.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  );
+
+  return (
+    <main className="p-3">
+      <header className="flex items-center gap-3 bg-gray-900 px-3 py-1 mb-3">
+        <Link href="/">⬅️</Link>
+        <h1 className="text-xl tracking-wider">Summary</h1>
+      </header>
+
+      <section className="flex flex-col gap-3 bg-sky-600/20 mb-3 p-3 rounded-sm hover:bg-sky-600/50">
+        {items.map((item) => (
+          <div key={item.id}>
+            <p>
+              Product:{" "}
+              <span className="text-md tracking-wider font-semibold">
+                {item.name}
+              </span>{" "}
+              x{" "}
+              <span className="bg-sky-600/60 px-1.5 py-0.5  rounded-sm">
+                {item.quantity}
+              </span>
+            </p>
+          </div>
+        ))}
+
+        <aside className="border-t-2 border-dashed mt-3 pt-3">
+          <p className="text-right text-lg font-semibold tracking-wider">
+            Total:{" "}
+            <span className="bg-sky-600/60 px-1.5 py-0.5  rounded-sm">
+              ${totalPrice.toFixed(2)}
+            </span>
+          </p>
+        </aside>
+      </section>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="border-2 border-sky-800/30 p-3 rounded-sm"
+      >
+        <div className="flex flex-col mb-3">
+          <label
+            htmlFor="firstNameComplete"
+            className="ml-2 mb-1 tracking-wider font-bold"
+          >
+            First Name
+          </label>
+          <input
+            {...register("nameComplete", { required: true })}
+            className="bg-gray-900 rounded-sm px-2 py-1"
+          />
+          {errors.nameComplete && (
+            <p className="text-center font-semibold text-red-700">
+              Place enter your name
+            </p>
+          )}
+        </div>
+        {/*
+        <div className="flex flex-col mb-3">
+          <label
+            htmlFor="lastNameComplete"
+            className="ml-2 mb-1 tracking-wider font-bold"
+          >
+            Last Name
+          </label>
+          <input
+            {...register("lastNameComplete", { required: true })}
+            className="bg-gray-900 rounded-sm px-2 py-1"
+          />
+          {errors.lastNameComplete && (
+            <p className="text-center font-semibold text-red-700">
+              Place enter your last name
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col mb-3">
+          <label htmlFor="email" className="ml-2 mb-1 tracking-wider font-bold">
+            Email
+          </label>
+          <input
+            {...register("email", {
+              required: true,
+              pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            })}
+            className="bg-gray-900 rounded-sm px-2 py-1"
+          />
+          {errors.email && (
+            <p className="text-center font-semibold text-red-700">
+              Please enter your email
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col mb-3">
+          <label
+            htmlFor="confirmEmail"
+            className="ml-2 mb-1 tracking-wider font-bold"
+          >
+            Confirm Email
+          </label>
+          <input
+            {...register("confirmEmail", {
+              required: true,
+              pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            })}
+            className="bg-gray-900 rounded-sm px-2 py-1"
+          />
+          {errors.confirmEmail && (
+            <p className="text-center font-semibold text-red-700">
+              Please enter your confirm email
+            </p>
+          )}
+        </div>
+
+        {message && (
+          <p className="text-center font-semibold text-red-700">{message}</p>
+        )}
+
+        <div className="flex flex-col mb-3">
+          <label
+            htmlFor="address"
+            className="ml-2 mb-1 tracking-wider font-bold"
+          >
+            Address
+          </label>
+          <input
+            {...register("address", {
+              required: true,
+            })}
+            className="bg-gray-900 rounded-sm px-2 py-1"
+          />
+          {errors.address && (
+            <p className="text-center font-semibold text-red-700">
+              Please enter your address
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col mb-3">
+          <label
+            htmlFor="numberPhone"
+            className="ml-2 mb-1 tracking-wider font-bold"
+          >
+            Number Phone
+          </label>
+          <input
+            {...register("numberPhone", {
+              required: true,
+            })}
+            className="bg-gray-900 rounded-sm px-2 py-1"
+          />
+          {errors.numberPhone && (
+            <p className="text-center font-semibold text-red-700">
+              Please enter your number phone
+            </p>
+          )}
+        </div> */}
+
+        <input
+          type="submit"
+          value={loading ? "Confirming..." : "Confirm"}
+          className="bg-cyan-700 py-0.5 rounded-sm mt-3 cursor-pointer w-full tracking-wider font-bold"
+        />
+      </form>
+    </main>
+  );
+}

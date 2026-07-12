@@ -14,9 +14,7 @@ export default function Cart() {
   return (
     <main className="container mx-auto p-3">
       <header className=" mb-3 flex justify-between items-center bg-[#2c3e50] px-2 py-1 rounded-sm">
-        <Link href="/">
-          ⬅️
-        </Link>
+        <Link href="/">⬅️</Link>
         <h1 className="text-lg tracking-wider">My Online Store</h1>
         <div className="text-xl cursor-pointer">
           🛒{" "}
@@ -83,9 +81,12 @@ export default function Cart() {
               <h2 className="mb-3 border-b-2 pb-3">Your Cart</h2>
               <div className="text-right">
                 <p>Total: {totalPrice}</p>
-                <button className="bg-[#3498db]/50 rounded-md w-full mt-3 border-0 py-1 px-2 cursor-pointer">
+                <Link
+                  href="/checkout"
+                  className="bg-[#3498db]/50 rounded-md w-full mt-3 border-0 py-1 px-2 cursor-pointer"
+                >
                   Proceed to payment
-                </button>
+                </Link>
               </div>
             </aside>
           )}

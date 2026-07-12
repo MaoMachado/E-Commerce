@@ -26,7 +26,7 @@ export const cartReducer = (state: CartState, action: CartAction) => {
 
       if (existingItem) {
         updatedItems = state.items.map(
-          (item: { id: number; quantity: number }) =>
+          (item) =>
             item.id === action.payload.id
               ? { ...item, quantity: item.quantity + 1 }
               : item,
@@ -47,7 +47,7 @@ export const cartReducer = (state: CartState, action: CartAction) => {
 
     case "REMOVE_ITEM": {
       const updatedItems = state.items
-        .map((item: { id: number; quantity: number }) =>
+        .map((item) =>
           item.id === action.payload.id
             ? { ...item, quantity: item.quantity - 1 }
             : item,
