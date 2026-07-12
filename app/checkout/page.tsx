@@ -58,54 +58,57 @@ export default function Checkout() {
         <h1 className="text-xl tracking-wider">Summary</h1>
       </header>
 
-      <section className="flex flex-col gap-3 bg-sky-600/20 mb-3 p-3 rounded-sm hover:bg-sky-600/50">
-        {items.map((item) => (
-          <div key={item.id}>
-            <p>
-              Product:{" "}
-              <span className="text-md tracking-wider font-semibold">
-                {item.name}
-              </span>{" "}
-              x{" "}
+      <article className="flex flex-col lg:flex-row gap-3 lg:justify-center lg:items-start">
+        <section className="flex flex-col gap-3 bg-sky-600/20 lg:w-2/5 mb-3 p-3 rounded-sm hover:bg-sky-600/50">
+          {items.map((item) => (
+            <div key={item.id}>
+              <p>
+                Product:{" "}
+                <span className="text-md tracking-wider font-semibold">
+                  {item.name}
+                </span>{" "}
+                x{" "}
+                <span className="bg-sky-600/60 px-1.5 py-0.5  rounded-sm">
+                  {item.quantity}
+                </span>
+              </p>
+            </div>
+          ))}
+
+          <aside className="border-t-2 border-dashed mt-3 pt-3">
+            <p className="text-right text-lg font-semibold tracking-wider">
+              Total:{" "}
               <span className="bg-sky-600/60 px-1.5 py-0.5  rounded-sm">
-                {item.quantity}
+                ${totalPrice.toFixed(2)}
               </span>
             </p>
+          </aside>
+        </section>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="border-2 border-sky-800/30 p-3 rounded-sm w-sm"
+        >
+          <h2 className="text-xl tracking-wider mb-3 text-center font-semibold">Shipping Information</h2>
+
+          <div className="flex flex-col mb-3">
+            <label
+              htmlFor="firstNameComplete"
+              className="ml-2 mb-1 tracking-wider font-bold"
+            >
+              First Name
+            </label>
+            <input
+              {...register("nameComplete", { required: true })}
+              className="bg-gray-900 rounded-sm px-2 py-1"
+            />
+            {errors.nameComplete && (
+              <p className="text-center font-semibold text-red-700">
+                Place enter your name
+              </p>
+            )}
           </div>
-        ))}
-
-        <aside className="border-t-2 border-dashed mt-3 pt-3">
-          <p className="text-right text-lg font-semibold tracking-wider">
-            Total:{" "}
-            <span className="bg-sky-600/60 px-1.5 py-0.5  rounded-sm">
-              ${totalPrice.toFixed(2)}
-            </span>
-          </p>
-        </aside>
-      </section>
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="border-2 border-sky-800/30 p-3 rounded-sm"
-      >
-        <div className="flex flex-col mb-3">
-          <label
-            htmlFor="firstNameComplete"
-            className="ml-2 mb-1 tracking-wider font-bold"
-          >
-            First Name
-          </label>
-          <input
-            {...register("nameComplete", { required: true })}
-            className="bg-gray-900 rounded-sm px-2 py-1"
-          />
-          {errors.nameComplete && (
-            <p className="text-center font-semibold text-red-700">
-              Place enter your name
-            </p>
-          )}
-        </div>
-        {/*
+          {/*
         <div className="flex flex-col mb-3">
           <label
             htmlFor="lastNameComplete"
@@ -207,12 +210,13 @@ export default function Checkout() {
           )}
         </div> */}
 
-        <input
-          type="submit"
-          value={loading ? "Confirming..." : "Confirm"}
-          className="bg-cyan-700 py-0.5 rounded-sm mt-3 cursor-pointer w-full tracking-wider font-bold"
-        />
-      </form>
+          <input
+            type="submit"
+            value={loading ? "Confirming..." : "Confirm"}
+            className="bg-cyan-700 py-0.5 rounded-sm mt-3 cursor-pointer w-full tracking-wider font-bold"
+          />
+        </form>
+      </article>
     </main>
   );
 }

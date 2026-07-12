@@ -8,7 +8,7 @@ export default function ProductCard() {
   const products: Product[] = productsData;
 
   return (
-    <section className="px-3">
+    <section className="container mx-auto">
       <article className="grid grid-cols-2 md:grid-cols-4 gap-3 my-3">
         {products.map((product) => (
           <section
