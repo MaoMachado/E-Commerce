@@ -1,14 +1,14 @@
 "use client";
 
 import { useCart } from "../context/CartContext";
+import { useRouter } from "next/navigation";
+import { getTotalCart } from "../utils/cart";
 
 export default function Cart() {
   const { items, totalItems, addToCart, removeFromCart } = useCart();
+  const router = useRouter();
 
-  const totalPrice = items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0,
-  );
+  const totalPrice = getTotalCart(items);
 
   return (
     <main className="container mx-auto py-3">
@@ -98,7 +98,7 @@ export default function Cart() {
                   </span>
                 </p>
                 <button
-                  onClick={() => (window.location.href = "/checkout")}
+                  onClick={() => router.push("/checkout")}
                   className="bg-[#3498db]/50 rounded-md w-full border-0 py-1 cursor-pointer"
                 >
                   Proceed to payment

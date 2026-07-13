@@ -2,12 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 
-interface Params {
-  params: {
-    nameComplete: string;
-  };
-}
-
 export default function Success() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || "Cliente";
