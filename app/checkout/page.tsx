@@ -5,7 +5,8 @@ import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { getCartSummary, getTotalCart } from "../utils/cart";
+import { getCartSummary, getTotalCart, validationStock } from "../utils/cart";
+import { productsData } from "../data/products";
 
 type Inputs = {
   nameComplete: string;
@@ -19,6 +20,7 @@ type Inputs = {
 export default function Checkout() {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [stockErrors, setStockErrors] = useState<string[]>([]);
   const { items, clearCart } = useCart();
   const router = useRouter();
 
@@ -28,6 +30,16 @@ export default function Checkout() {
     }
   }, []);
 
+  useEffect(() => {
+    const { isValid, errors } = validationStock(items, productsData);
+
+    if (!isValid) {
+      setStockErrors(errors);
+    } else {
+      setStockErrors([]);
+    }
+  }, [items]);
+
   const {
     register,
     handleSubmit,
@@ -35,6 +47,13 @@ export default function Checkout() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const { isValid, errors } = validationStock(items, productsData);
+
+    if (!isValid) {
+      setStockErrors(errors);
+      return;
+    }
+
     setLoading(true);
 
     if (data.email !== data.confirmEmail) {
@@ -218,6 +237,17 @@ export default function Checkout() {
           />
         </form>
       </article>
+
+      {stockErrors.length > 0 && (
+        <span className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <strong>No podemos proceder tu pedido:</strong>
+          <ul className="list-disc ml-5 mt-2">
+            {stockErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </span>
+      )}
     </main>
   );
 }
