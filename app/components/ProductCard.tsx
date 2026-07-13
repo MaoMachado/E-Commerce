@@ -24,13 +24,13 @@ export default function ProductCard() {
             </div>
 
             <div className="flex min-h-fit flex-col gap-2 p-2">
-              <h2 className="text-sm font-medium leading-snug">
-                {product.name}
+              <h2 className="text-sm font-medium leading-snug lg:text-lg lg:flex lg:items-center lg:justify-between tracking-widest">
+                {product.name} <span className="bg-sky-600 px-1 rounded-full text-sm">Stock - {product.stock}</span>
               </h2>
 
               <div className="mx-auto flex items-center justify-between gap-2">
-                <p className="text-sm font-semibold">{product.price}</p>
-                <span className="rounded bg-sky-600/20 px-1.5 py-0.5 text-xs">
+                <p className="text-sm font-semibold lg:text-lg">$ {product.price}</p>
+                <span className="rounded bg-sky-600/20 px-1.5 py-0.5 text-xs lg:text-sm">
                   {product.category}
                 </span>
               </div>

@@ -1,4 +1,4 @@
-import { CartItem, Product } from "../data/products";
+import { CartItem, Product, productsData } from "../data/products";
 
 export function getTotalCart(items: CartItem[]): number {
   return items.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -38,5 +38,28 @@ export const validationStock = (cartItems: CartItem[], products: Product[]) => {
       ...item,
       availableStock: productMaps.get(item.id)?.stock || 0,
     })),
+  };
+};
+
+export const validateStockOnlyCart = (
+  cartItems: CartItem[],
+): { isValid: boolean; errors: string[] } => {
+  const errors: string[] = [];
+
+  cartItems.forEach((item) => {
+    const product = productsData.find((p) => p.id === item.id);
+
+    if (!product) {
+      errors.push(`The producto ${item.name} is not available`);
+    } else if (item.quantity > product.stock) {
+      errors.push(
+        `We only have ${product.stock} units available of ${item.name}. You have added ${item.quantity}`,
+      );
+    }
+  });
+
+  return {
+    isValid: errors.length === 0,
+    errors,
   };
 };

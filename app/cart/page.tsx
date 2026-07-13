@@ -2,13 +2,27 @@
 
 import { useCart } from "../context/CartContext";
 import { useRouter } from "next/navigation";
-import { getTotalCart } from "../utils/cart";
+import { getTotalCart, validationStock } from "../utils/cart";
+import { useState } from "react";
+import { CartItem, productsData } from "../data/products";
 
 export default function Cart() {
   const { items, totalItems, addToCart, removeFromCart } = useCart();
+  const [stockErrors, setStockErrors] = useState<string[]>([]);
   const router = useRouter();
 
   const totalPrice = getTotalCart(items);
+
+  function handleCheckoutAvailable(item: CartItem) {
+    const { isValid, errors } = validationStock([item], productsData);
+
+    if (!isValid) {
+      setStockErrors(errors);
+      return;
+    }
+
+    addToCart(item);
+  }
 
   return (
     <main className="container mx-auto py-3">
@@ -55,7 +69,7 @@ export default function Cart() {
                 />
 
                 <div>
-                  <h3>{item.name}</h3>
+                  <h3 className="lg:text-lg tracking-wider">{item.name}</h3>
                   <p className="flex justify-center gap-3 py-3">
                     Quantity:{" "}
                     <span className="bg-sky-600/60 px-1 font-bold rounded-full">
@@ -63,7 +77,7 @@ export default function Cart() {
                     </span>
                     <button
                       className="cursor-pointer"
-                      onClick={() => addToCart(item)}
+                      onClick={() => handleCheckoutAvailable(item)}
                     >
                       👍
                     </button>
@@ -74,8 +88,21 @@ export default function Cart() {
                       👎
                     </button>
                   </p>
-                  <p>Price: {item.price}</p>
-                  <p>Subtotal: {item.price * item.quantity}</p>
+                  <p>Price: $ {item.price}</p>
+                  <p className="mt-3 border-t-2 pt-3 text-lg font-semibold tracking-wider">
+                    Subtotal: $ {item.price * item.quantity}
+                  </p>
+
+                  {stockErrors.length > 0 && (
+                    <span className="absolute bottom-5 left-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                      <strong>No podemos proceder tu pedido:</strong>
+                      <ul className="list-disc ml-5 mt-2">
+                        {stockErrors.map((error, index) => (
+                          <li key={index}>{error}</li>
+                        ))}
+                      </ul>
+                    </span>
+                  )}
                 </div>
               </div>
             ))}

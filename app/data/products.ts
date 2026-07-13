@@ -17,7 +17,7 @@ export const productsData: Product[] = [
     name: "Hoodie Oversized Black",
     price: 45.99,
     category: "Hoodies",
-    stock: 10,
+    stock: 1,
     image: "https://picsum.photos/id/1/400/500",
   },
   {

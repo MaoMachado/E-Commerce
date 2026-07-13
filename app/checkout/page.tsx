@@ -5,7 +5,12 @@ import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { getCartSummary, getTotalCart, validationStock } from "../utils/cart";
+import {
+  getCartSummary,
+  getTotalCart,
+  validateStockOnlyCart,
+  validationStock,
+} from "../utils/cart";
 import { productsData } from "../data/products";
 
 type Inputs = {
@@ -30,16 +35,6 @@ export default function Checkout() {
     }
   }, []);
 
-  useEffect(() => {
-    const { isValid, errors } = validationStock(items, productsData);
-
-    if (!isValid) {
-      setStockErrors(errors);
-    } else {
-      setStockErrors([]);
-    }
-  }, [items]);
-
   const {
     register,
     handleSubmit,
@@ -47,7 +42,7 @@ export default function Checkout() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const { isValid, errors } = validationStock(items, productsData);
+    const { isValid, errors } = validateStockOnlyCart(items);
 
     if (!isValid) {
       setStockErrors(errors);
@@ -239,7 +234,7 @@ export default function Checkout() {
       </article>
 
       {stockErrors.length > 0 && (
-        <span className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <span className="absolute bottom-5 right-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           <strong>No podemos proceder tu pedido:</strong>
           <ul className="list-disc ml-5 mt-2">
             {stockErrors.map((error, index) => (
