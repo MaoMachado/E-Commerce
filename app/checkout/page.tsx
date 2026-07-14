@@ -9,9 +9,7 @@ import {
   getCartSummary,
   getTotalCart,
   validateStockOnlyCart,
-  validationStock,
 } from "../utils/cart";
-import { productsData } from "../data/products";
 
 type Inputs = {
   nameComplete: string;

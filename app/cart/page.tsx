@@ -4,9 +4,11 @@ import { useCart } from "../context/CartContext";
 import { useRouter } from "next/navigation";
 import { getTotalCart, validationStock } from "../utils/cart";
 import { useState } from "react";
-import { CartItem, productsData } from "../data/products";
+import { CartItem } from "../data/products";
+import { useProducts } from "../context/ProductContext";
 
 export default function Cart() {
+  const { products } = useProducts();
   const { items, totalItems, addToCart, removeFromCart } = useCart();
   const [stockErrors, setStockErrors] = useState<string[]>([]);
   const router = useRouter();
@@ -14,7 +16,7 @@ export default function Cart() {
   const totalPrice = getTotalCart(items);
 
   function handleCheckoutAvailable(item: CartItem) {
-    const { isValid, errors } = validationStock([item], productsData);
+    const { isValid, errors } = validationStock([item], products);
 
     if (!isValid) {
       setStockErrors(errors);

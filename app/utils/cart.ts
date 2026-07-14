@@ -1,4 +1,7 @@
-import { CartItem, Product, productsData } from "../data/products";
+import { CartItem, Product } from "../data/products";
+import { useProducts } from "../context/ProductContext";
+
+const { products } = useProducts();
 
 export function getTotalCart(items: CartItem[]): number {
   return items.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -47,7 +50,7 @@ export const validateStockOnlyCart = (
   const errors: string[] = [];
 
   cartItems.forEach((item) => {
-    const product = productsData.find((p) => p.id === item.id);
+    const product = products.find((p) => p.id === item.id);
 
     if (!product) {
       errors.push(`The producto ${item.name} is not available`);

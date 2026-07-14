@@ -1,11 +1,29 @@
 "use client";
 
 import { useCart } from "../context/CartContext";
-import { Product, productsData } from "../data/products";
+import { useProducts } from "../context/ProductContext";
+import { Product } from "../data/products";
 
-export default function ProductCard() {
+export default function ProductCard({ products }: { products: Product[] }) {
   const { addToCart } = useCart();
-  const products: Product[] = productsData;
+  const { refreshProduct } = useProducts();
+
+  if (!products || products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <div className="text-center mt-3 text-xl tracking-wider">
+          No products found
+        </div>
+
+        <button
+          className="mt-3 rounded-md bg-sky-700 px-2 py-1.5 text-sm font-medium cursor-pointer hover:bg-sky-600"
+          onClick={refreshProduct}
+        >
+          Refresh
+        </button>
+      </div>
+    );
+  }
 
   return (
     <section className="container mx-auto">
@@ -25,11 +43,16 @@ export default function ProductCard() {
 
             <div className="flex min-h-fit flex-col gap-2 p-2">
               <h2 className="text-sm font-medium leading-snug lg:text-lg lg:flex lg:items-center lg:justify-between tracking-widest">
-                {product.name} <span className="bg-sky-600 px-1 rounded-full text-sm">Stock - {product.stock}</span>
+                {product.name}{" "}
+                <span className="bg-sky-600 px-1 rounded-full text-sm">
+                  Stock - {product.stock}
+                </span>
               </h2>
 
               <div className="mx-auto flex items-center justify-between gap-2">
-                <p className="text-sm font-semibold lg:text-lg">$ {product.price}</p>
+                <p className="text-sm font-semibold lg:text-lg">
+                  $ {product.price}
+                </p>
                 <span className="rounded bg-sky-600/20 px-1.5 py-0.5 text-xs lg:text-sm">
                   {product.category}
                 </span>
