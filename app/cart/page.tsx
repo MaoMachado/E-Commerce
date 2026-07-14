@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { getTotalCart, validationStock } from "../utils/cart";
 import { useState } from "react";
 import { CartItem } from "../data/products";
-import { useProducts } from "../context/ProductContext";
+import { useProducts } from "@/app/context/ProductContext";
 
 export default function Cart() {
   const { products } = useProducts();

@@ -52,7 +52,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
         setError(err.message);
         setLoading(false);
       });
-  });
+  }, []);
 
   const refreshProduct = async () => {
     // await fetchProducts();

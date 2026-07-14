@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useCart } from "../context/CartContext";
 import {
   getCartSummary,
   getTotalCart,
   validateStockOnlyCart,
 } from "../utils/cart";
+import { useProducts } from "../context/ProductContext";
+import { saveOrder } from "../lib/firebase/orders";
 
 type Inputs = {
   nameComplete: string;
@@ -26,6 +28,7 @@ export default function Checkout() {
   const [stockErrors, setStockErrors] = useState<string[]>([]);
   const { items, clearCart } = useCart();
   const router = useRouter();
+  const { products } = useProducts();
 
   useEffect(() => {
     if (items.length === 0) {
@@ -39,8 +42,8 @@ export default function Checkout() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const { isValid, errors } = validateStockOnlyCart(items);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { isValid, errors } = validateStockOnlyCart(items, products);
 
     if (!isValid) {
       setStockErrors(errors);
@@ -54,6 +57,17 @@ export default function Checkout() {
       setLoading(false);
       return;
     }
+
+    await saveOrder({
+      customerName: data.nameComplete,
+      item: items.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+      total: totalPrice,
+    });
 
     setTimeout(() => {
       setLoading(false);

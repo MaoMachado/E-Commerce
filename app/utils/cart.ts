@@ -1,7 +1,4 @@
 import { CartItem, Product } from "../data/products";
-import { useProducts } from "../context/ProductContext";
-
-const { products } = useProducts();
 
 export function getTotalCart(items: CartItem[]): number {
   return items.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -46,6 +43,7 @@ export const validationStock = (cartItems: CartItem[], products: Product[]) => {
 
 export const validateStockOnlyCart = (
   cartItems: CartItem[],
+  products: Product[],
 ): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
 

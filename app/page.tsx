@@ -2,7 +2,7 @@
 
 import Header from "./components/Header";
 import ProductCard from "./components/ProductCard";
-import { useProducts } from "./context/ProductContext";
+import { useProducts } from "@/app/context/ProductContext";
 
 export default function Home() {
   const { products, loading, error } = useProducts();
