@@ -41,8 +41,8 @@ export default function ProductCard({ products }: { products: Product[] }) {
               />
             </div>
 
-            <div className="flex min-h-fit flex-col gap-2 p-2">
-              <h2 className="text-sm font-medium leading-snug lg:text-lg lg:flex lg:items-center lg:justify-between tracking-widest">
+            <div className="flex flex-col gap-2 p-2">
+              <h2 className="text-sm font-medium leading-snug lg:text-lg flex flex-col lg:flex-row items-center lg:justify-between tracking-widest">
                 {product.name}{" "}
                 <span className="bg-sky-600 px-1 rounded-full text-sm">
                   Stock - {product.stock}
