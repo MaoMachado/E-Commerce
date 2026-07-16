@@ -131,7 +131,7 @@ export default function Cart() {
                     onClick={() => router.push("/checkout")}
                     className="bg-sky-600/50 rounded-md w-full border-0 py-1 cursor-pointer font-semibold tracking-wider hover:-translate-y-0.5 transition-transform duration-100"
                   >
-                    Proceed to payment  
+                    Proceed to payment
                   </button>
                 </div>
               </div>
