@@ -4,13 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import {
-  getCartSummary,
-  getTotalCart,
-  validateStockOnlyCart,
-} from "../utils/cart";
+import { getCartSummary, getTotalCart, validationStock } from "../utils/cart";
 import { useCart } from "../context/CartContext";
 import { saveOrder } from "../lib/firebase/orders";
+import { useProducts } from "../context/ProductContext";
 
 type Inputs = {
   nameComplete: string;
@@ -26,6 +23,7 @@ export default function Checkout() {
   const [message, setMessage] = useState<string>("");
   const [stockErrors, setStockErrors] = useState<string[]>([]);
   const { items, clearCart } = useCart();
+  const { products } = useProducts();
   const router = useRouter();
 
   useEffect(() => {
@@ -41,7 +39,7 @@ export default function Checkout() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const { isValid, errors } = validateStockOnlyCart(items);
+    const { isValid, errors } = validationStock(items, products);
 
     if (!isValid) {
       setStockErrors(errors);

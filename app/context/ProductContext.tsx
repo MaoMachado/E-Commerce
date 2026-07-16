@@ -42,22 +42,6 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     fetchProducts();
   }, []);
 
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
-
-  useEffect(() => {
-    getProducts()
-      .then((data) => {
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-
   const refreshProduct = async () => {
     await fetchProducts();
   };
