@@ -24,19 +24,23 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // const fetchProducts = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const data = await getProducts();
-  //     setProducts(data);
-  //     setError(null);
-  //   } catch (err) {
-  //     setError("Failed to load products, please, try again later");
-  //     console.error("Error fetching products: ", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const data = await getProducts();
+      setProducts(data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to load products, please, try again later");
+      console.error("Error fetching products: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   // useEffect(() => {
   //   fetchProducts();
@@ -55,8 +59,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const refreshProduct = async () => {
-    // await fetchProducts();
-    console.log("Refresh data");
+    await fetchProducts();
   };
 
   return (

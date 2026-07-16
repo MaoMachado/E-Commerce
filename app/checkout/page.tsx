@@ -4,14 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useCart } from "../context/CartContext";
 import {
   getCartSummary,
   getTotalCart,
   validateStockOnlyCart,
 } from "../utils/cart";
-import { useProducts } from "../context/ProductContext";
-import { saveOrder } from "../lib/firebase/orders";
 
 type Inputs = {
   nameComplete: string;
@@ -28,7 +25,6 @@ export default function Checkout() {
   const [stockErrors, setStockErrors] = useState<string[]>([]);
   const { items, clearCart } = useCart();
   const router = useRouter();
-  const { products } = useProducts();
 
   useEffect(() => {
     if (items.length === 0) {
@@ -42,11 +38,11 @@ export default function Checkout() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const { isValid, errors } = validateStockOnlyCart(items, products);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const { isValid, errors } = validateStockOnlyCart(items);
 
     if (!isValid) {
-      setStockErrors(errors);
+      setStockErrors(stockErrorsValidation);
       return;
     }
 
@@ -58,24 +54,19 @@ export default function Checkout() {
       return;
     }
 
-    await saveOrder({
-      customerName: data.nameComplete,
-      item: items.map((item) => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-      })),
-      total: totalPrice,
-    });
+      setTimeout(() => {
+        setLoading(false);
+        clearCart();
 
-    setTimeout(() => {
+        const encodeName = encodeURIComponent(data.nameComplete);
+        router.push(`/success?orderId=${orderId}&name=${encodeName}`);
+      }, 2000);
+    } catch (err) {
+      console.error("Error al guardar el pedido: ", err);
+      setMessage("Error processing your order. Please try again");
+    } finally {
       setLoading(false);
-      clearCart();
-
-      const encodeName = encodeURIComponent(data.nameComplete);
-      router.push(`/success?name=${encodeName}`);
-    }, 2000);
+    }
   };
 
   const totalPrice = getTotalCart(items);

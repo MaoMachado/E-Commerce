@@ -12,6 +12,7 @@ export const validationStock = (cartItems: CartItem[], products: Product[]) => {
   const productMaps = new Map(products.map((p) => [p.id, p]));
 
   const errors: string[] = [];
+
   const isValid = cartItems.every((item) => {
     const product = productMaps.get(item.id);
     if (!product) {
@@ -43,7 +44,6 @@ export const validationStock = (cartItems: CartItem[], products: Product[]) => {
 
 export const validateStockOnlyCart = (
   cartItems: CartItem[],
-  products: Product[],
 ): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
 
