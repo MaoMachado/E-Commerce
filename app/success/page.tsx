@@ -3,14 +3,14 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { getOrderById } from "../lib/firebase/orders";
+import { getOrderById, Order } from "../lib/firebase/orders";
 
 export default function Success() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
 
+  const [order, setOrder] = useState<(Order & { id: string }) | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [order, setOrder] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   const fetchOrder = async (orderId: string) => {
@@ -27,11 +27,13 @@ export default function Success() {
     }
   };
 
-  console.log(order);
-
   useEffect(() => {
     if (orderId) fetchOrder(orderId);
   }, [orderId]);
+
+  if (loading) return <p>Loading...</p>;
+
+  if (error) return <p>{error}</p>;
 
   return (
     <section className="p-3 bg-linear-to-b from-sky-600/50 via-transparent place-content-center h-screen">

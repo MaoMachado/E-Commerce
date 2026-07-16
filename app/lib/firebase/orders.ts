@@ -12,18 +12,21 @@ export interface Order {
   customerName: string;
   items: OrderItem[];
   total: number;
+  createdAt: string;
 }
 
 export const saveOrder = async (orderData: Order) => {
   const orderCol = collection(db, "orders");
   const docRef = await addDoc(orderCol, {
     ...orderData,
-    createAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
   });
   return docRef.id;
 };
 
-export const getOrderById = async (orderId: string): Promise<Order | null> => {
+export const getOrderById = async (
+  orderId: string,
+): Promise<(Order & { id: string }) | null> => {
   const docRef = doc(db, "orders", orderId);
   const snapshot = await getDoc(docRef);
 
