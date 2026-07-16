@@ -32,7 +32,7 @@ export default function Checkout() {
     if (items.length === 0) {
       router.push("/cart");
     }
-  }, []);
+  }, [items]);
 
   const {
     register,
@@ -66,20 +66,18 @@ export default function Checkout() {
           quantity,
         })),
         total: totalPrice,
+        createdAt: new Date().toISOString(),
       });
 
       setTimeout(() => {
-        setLoading(false);
         clearCart();
-
         const encodeName = encodeURIComponent(data.nameComplete);
         router.push(`/success?orderId=${orderId}&name=${encodeName}`);
       }, 2000);
     } catch (err) {
       console.error("Error al guardar el pedido: ", err);
-      setMessage("Error processing your order. Please try again");
-    } finally {
       setLoading(false);
+      setMessage("Error processing your order. Please try again");
     }
   };
 
@@ -252,7 +250,7 @@ export default function Checkout() {
 
       {stockErrors.length > 0 && (
         <span className="absolute bottom-5 right-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          <strong>No podemos proceder tu pedido:</strong>
+          <strong>We cannot process your order</strong>
           <ul className="list-disc ml-5 mt-2">
             {stockErrors.map((error, index) => (
               <li key={index}>{error}</li>
