@@ -24,39 +24,38 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // const fetchProducts = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const data = await getProducts();
-  //     setProducts(data);
-  //     setError(null);
-  //   } catch (err) {
-  //     setError("Failed to load products, please, try again later");
-  //     console.error("Error fetching products: ", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const data = await getProducts();
+      setProducts(data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to load products, please, try again later");
+      console.error("Error fetching products: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    getProducts()
-      .then((data) => {
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  });
+    fetchProducts();
+  }, []);
+
+  // useEffect(() => {
+  //   getProducts()
+  //     .then((data) => {
+  //       setProducts(data);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       setError(err.message);
+  //       setLoading(false);
+  //     });
+  // });
 
   const refreshProduct = async () => {
-    // await fetchProducts();
-    console.log("Refresh data");
+    await fetchProducts();
   };
 
   return (

@@ -36,15 +36,15 @@ export default function Cart() {
           ⬅️
         </button>
         <h1 className="text-lg tracking-wider">My Online Store</h1>
-        <div className="text-xl cursor-pointer">
+        <div className="text-xl">
           🛒{" "}
-          <span className="bg-sky-700 text-lg px-1.5 py-0.5 rounded-full">
+          <span className="bg-sky-700 text-lg px-1.5 py-0.5 rounded-md">
             {totalItems}
           </span>
         </div>
       </header>
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col lg:flex-row gap-3">
         {items.length === 0 ? (
           <div className="flex flex-col items-center gap-3 mx-auto py-3">
             <p className="text-xl tracking-wider font-semibold">
@@ -116,7 +116,7 @@ export default function Cart() {
             <p className="text-center text-2xl">😔</p>
           ) : (
             <aside className="bg-gray-900 pb-3 rounded-lg lg:w-md ml-auto">
-              <h2 className="mb-3 border-b-2 p-3 text-xl tracking-wider font-semibold">
+              <h2 className="mb-3 border-b-2 border-dashed border-gray-500/50 py-3 text-center text-xl tracking-wider font-semibold">
                 Your Cart
               </h2>
               <div className="text-right">
@@ -126,12 +126,14 @@ export default function Cart() {
                     ${totalPrice}
                   </span>
                 </p>
-                <button
-                  onClick={() => router.push("/checkout")}
-                  className="bg-[#3498db]/50 rounded-md w-full border-0 py-1 cursor-pointer"
-                >
-                  Proceed to payment
-                </button>
+                <div className="px-3 pb-3">
+                  <button
+                    onClick={() => router.push("/checkout")}
+                    className="bg-sky-600/50 rounded-md w-full border-0 py-1 cursor-pointer font-semibold tracking-wider hover:-translate-y-0.5 transition-transform duration-100"
+                  >
+                    Proceed to payment  
+                  </button>
+                </div>
               </div>
             </aside>
           )}
