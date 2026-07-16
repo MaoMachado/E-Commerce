@@ -9,6 +9,8 @@ import {
   getTotalCart,
   validateStockOnlyCart,
 } from "../utils/cart";
+import { useCart } from "../context/CartContext";
+import { saveOrder } from "../lib/firebase/orders";
 
 type Inputs = {
   nameComplete: string;
@@ -38,11 +40,11 @@ export default function Checkout() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { isValid, errors } = validateStockOnlyCart(items);
 
     if (!isValid) {
-      setStockErrors(stockErrorsValidation);
+      setStockErrors(errors);
       return;
     }
 
@@ -53,6 +55,18 @@ export default function Checkout() {
       setLoading(false);
       return;
     }
+
+    try {
+      const orderId = await saveOrder({
+        customerName: data.nameComplete,
+        items: items.map(({ id, name, price, quantity }) => ({
+          id,
+          name,
+          price,
+          quantity,
+        })),
+        total: totalPrice,
+      });
 
       setTimeout(() => {
         setLoading(false);
