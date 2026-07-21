@@ -26,11 +26,11 @@ export default function Checkout() {
   const { products } = useProducts();
   const router = useRouter();
 
-  useEffect(() => {
-    if (items.length === 0) {
-      router.push("/cart");
-    }
-  }, [items]);
+  // useEffect(() => {
+  //   if (items.length === 0) {
+  //     router.push("/cart");
+  //   }
+  // }, [items]);
 
   const {
     register,
