@@ -36,12 +36,17 @@ app/
 
 ## Screenshots
 
-```
-![Home Page](/screenshots/screen1.png)
-![Cart Page](/screenshots/screen2.png)
-![Checkout Page](/screenshots/screen3.png)
-![Success Page](/screenshots/screen4.png)
-```
+### Home Page
+![Home Page](public/screenshots/screen1.png)
+
+### Cart Page
+![Cart Page](public/screenshots/screen2.png)
+
+### Checkout Page
+![Checkout Page](public/screenshots/screen3.png)
+
+### Success Page
+![Success Page](public/screenshots/screen4.png)
 
 ## Instalación
 
