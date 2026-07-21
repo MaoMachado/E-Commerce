@@ -14,7 +14,7 @@ App de e-commerce con carrito de compras persistente, catálogo desde Firestore 
 
 ## Funcionalidades
 
-- Catálogo de productos desde Firestore con loading skeleton
+- Catálogo de productos desde Firestore con loading skeleton e imágenes dinámicas
 - Carrito de compras con persistencia en localStorage
 - Validación de stock antes de agregar al carrito
 - Checkout con formulario y guardado de órdenes en Firestore
@@ -33,6 +33,20 @@ app/
 ├── cart/           # Carrito de compras
 └── success/        # Confirmación de orden
 ```
+
+## Screenshots
+
+### Home Page
+![Home Page](public/screenshots/screen1.png)
+
+### Cart Page
+![Cart Page](public/screenshots/screen2.png)
+
+### Checkout Page
+![Checkout Page](public/screenshots/screen3.png)
+
+### Success Page
+![Success Page](public/screenshots/screen4.png)
 
 ## Instalación
 
