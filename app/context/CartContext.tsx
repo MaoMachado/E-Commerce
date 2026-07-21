@@ -20,9 +20,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     const saveCard = localStorage.getItem("cart");
     if (saveCard) {
       const parsed = JSON.parse(saveCard);
-      parsed.items.forEach((item: { id: number; quantity: number }) => {
-        dispatch({ type: "ADD_ITEM", payload: { ...item, quantity: 0 } });
-      });
+      dispatch({ type: "RESTORE_CART", payload: parsed });
     }
   }, []);
 
