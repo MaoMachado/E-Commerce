@@ -6,9 +6,11 @@ import { getTotalCart, validationStock } from "../utils/cart";
 import { useState } from "react";
 import { CartItem } from "../data/products";
 import { useProducts } from "@/app/context/ProductContext";
+import CartCard from "../components/cart/CartCard";
+import CartCardSkeleton from "../components/cart/CartCardSkeleton";
 
 export default function Cart() {
-  const { products } = useProducts();
+  const { products, loading } = useProducts();
   const { items, totalItems, addToCart, removeFromCart } = useCart();
   const [stockErrors, setStockErrors] = useState<string[]>([]);
   const router = useRouter();
@@ -59,55 +61,33 @@ export default function Cart() {
           </div>
         ) : (
           <article className="flex-3 flex flex-wrap justify-between lg:justify-center gap-3">
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="lg:w-xs border border-[#ddd]/20 rounded-lg p-3 text-center bg-gray-900"
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="rounded-lg mb-3"
-                />
-
-                <div>
-                  <h3 className="lg:text-lg tracking-wider">{item.name}</h3>
-                  <p className="flex justify-center gap-3 py-3">
-                    Quantity:{" "}
-                    <span className="bg-sky-600/60 px-1 font-bold rounded-full">
-                      {item.quantity}
-                    </span>
-                    <button
-                      className="cursor-pointer"
-                      onClick={() => handleCheckoutAvailable(item)}
-                    >
-                      👍
-                    </button>
-                    <button
-                      className="cursor-pointer"
-                      onClick={() => removeFromCart({ id: item.id })}
-                    >
-                      👎
-                    </button>
-                  </p>
-                  <p>Price: $ {item.price}</p>
-                  <p className="mt-3 border-t-2 pt-3 text-lg font-semibold tracking-wider">
-                    Subtotal: $ {item.price * item.quantity}
-                  </p>
-
-                  {stockErrors.length > 0 && (
-                    <span className="absolute bottom-5 left-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                      <strong>No podemos proceder tu pedido:</strong>
-                      <ul className="list-disc ml-5 mt-2">
-                        {stockErrors.map((error, index) => (
-                          <li key={index}>{error}</li>
-                        ))}
-                      </ul>
-                    </span>
-                  )}
-                </div>
+            {loading ? (
+              <div className="flex flex-wrap justify-center gap-3 mx-auto py-3">
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <CartCardSkeleton key={index} />
+                ))}
               </div>
-            ))}
+            ) : (
+              items.map((item) => (
+                <CartCard
+                  key={item.id}
+                  item={item}
+                  handleCheckoutAvailable={handleCheckoutAvailable}
+                  removeFromCart={removeFromCart}
+                />
+              ))
+            )}
+
+            {stockErrors.length > 0 && (
+              <span className="absolute bottom-5 left-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                <strong>No podemos proceder tu pedido:</strong>
+                <ul className="list-disc ml-5 mt-2">
+                  {stockErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </span>
+            )}
           </article>
         )}
 
