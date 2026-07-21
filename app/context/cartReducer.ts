@@ -8,7 +8,8 @@ export interface CartState {
 export type CartAction =
   | { type: "ADD_ITEM"; payload: Product }
   | { type: "REMOVE_ITEM"; payload: { id: number } }
-  | { type: "CLEAR_CART" };
+  | { type: "CLEAR_CART" }
+  | { type: "RESTORE_CART"; payload: CartState };
 
 export const initialState: CartState = {
   items: [],
@@ -17,6 +18,10 @@ export const initialState: CartState = {
 
 export const cartReducer = (state: CartState, action: CartAction) => {
   switch (action.type) {
+    case "RESTORE_CART": {
+      return action.payload;
+    }
+
     case "ADD_ITEM": {
       const existingItem = state.items.find(
         (item: { id: number }) => item.id === action.payload.id,
@@ -25,11 +30,10 @@ export const cartReducer = (state: CartState, action: CartAction) => {
       let updatedItems;
 
       if (existingItem) {
-        updatedItems = state.items.map(
-          (item) =>
-            item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item,
+        updatedItems = state.items.map((item) =>
+          item.id === action.payload.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
         );
       } else {
         updatedItems = [...state.items, { ...action.payload, quantity: 1 }];
